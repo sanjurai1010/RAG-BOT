@@ -1,0 +1,131 @@
+#  DocMind — RAG Chatbot
+
+> Upload any document and chat with it using AI. **100% Free** — no credit card needed.
+
+---
+
+##  Project Structure
+
+```
+DocMind/
+├── app.py                        ← Entry point — run this!
+├── requirements.txt              ← All dependencies
+├── .env                          ← Your Groq API key                 ← Template for .env
+├── .gitignore                    ← Keeps .env off GitHub
+│
+├── backend/
+│   ├── __init__.py
+│   ├── document_processor.py     ← File loading + chunking + embeddings + FAISS
+│   └── rag_chain.py              ← Groq LLM + retriever + prompt chain
+│
+└── frontend/
+    ├── __init__.py
+    ├── styles.py                 ← All custom CSS
+    ├── sidebar.py                ← Sidebar UI + build knowledge base logic
+    └── chat.py                   ← Chat messages + input box
+```
+
+---
+
+##  How It Works
+
+```
+Upload Document
+     ↓  backend/document_processor.py
+     ↓  LangChain Loaders (PDF / TXT / DOCX / CSV)
+Raw Text
+     ↓  RecursiveCharacterTextSplitter
+     ↓  chunk_size=1000, chunk_overlap=200
+Chunks
+     ↓  FastEmbedEmbeddings (BAAI/bge-small-en-v1.5)
+     ↓  Runs locally — no API needed
+Vectors
+     ↓  FAISS Vector Store
+Stored on your PC
+
+Your Question
+     ↓  backend/rag_chain.py
+     ↓  FAISS similarity search → top k chunks
+Relevant Context
+     ↓  PromptTemplate → Groq LLM (LLaMA 3.3 70B)
+Answer
+     ↓  frontend/chat.py
+Chat Interface ✅
+```
+
+---
+
+
+---
+
+## 🚀 Setup & Run
+
+### 1. Clone / Download the project
+```
+git clone https://github.com/yourusername/DocMind.git
+cd DocMind
+```
+
+### 2. Install dependencies
+```
+pip install -r requirements.txt
+```
+
+### 3. Create your `.env` file
+```
+# Copy the example
+cp .env.example .env
+
+# Edit .env and paste your Groq key
+GROQ_API_KEY=gsk_your_key_here
+```
+Get your **free** Groq key at [console.groq.com](https://console.groq.com)
+
+### 4. Run the app
+```
+python -m streamlit run app.py
+```
+
+Open browser at `http://localhost:8501`
+
+---
+
+## 📖 Usage
+
+1. App opens → you'll see ✅ **API Key loaded from .env file!**
+2. **Upload documents** in the sidebar (PDF, TXT, DOCX, CSV)
+3. Choose your **LLM model** and adjust sliders if needed
+4. Click **🔨 Build Knowledge Base** — wait for processing
+5. **Ask questions** in the chat box!
+
+---
+
+## 🤖 Available Models (all free via Groq)
+
+| Model | Best For |
+|-------|---------|
+| LLaMA 3.3 70B | Best quality answers |
+| LLaMA 3.1 8B | Fastest responses |
+| Mixtral 8x7B | Long documents |
+| Gemma 2 9B | Alternative option |
+
+---
+
+## 📄 Supported File Types
+
+| Type | Extension |
+|------|-----------|
+| PDF | `.pdf` |
+| Word | `.docx` |
+| Text | `.txt` |
+| CSV | `.csv` |
+
+---
+
+## 🔒 Security
+
+- API key stored in `.env` — never hardcoded in code
+- `.env` listed in `.gitignore` — never pushed to GitHub
+- All document processing runs locally on your machine
+
+---
